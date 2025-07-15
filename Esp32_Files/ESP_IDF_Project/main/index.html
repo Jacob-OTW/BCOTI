@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DIY COTI</title>
+  <style>
+    :root {
+      --text_color: aliceblue;
+    }
+
+    body {
+      background-color: #2e3136;
+      font-size: 100px;
+      color: var(--text_color);
+      font-family: Agency FB;
+    }
+
+    .main {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    label {
+      width: 45vw;
+    }
+
+    .main > div {
+      margin: 10px;
+      width: calc(100% - 50px);
+      height: auto;
+      border: 5px solid #60e06d;
+      padding: 5px 10px;
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: left;
+    }
+
+    .main > div > div {
+      margin: 0px 10px;
+      width: auto;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+    }
+
+    select {
+      font-size: 50px;
+      color: var(--text_color);
+      background-color: #55595e;
+      border: 0px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 14px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    button {
+      font-size: 50px;
+      color: var(--text_color);
+      background-color: #55595e;
+      border: 0px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 14px;
+      width: 200px;
+      height: 100px;
+      cursor: pointer;
+    }
+
+    .zoom_controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .zoom_controls > div {
+      width: 300px;
+      margin: 5px;
+      display: flex;
+      height: fit-content;
+    }
+
+    .zoom_label {
+      font-size: 40px;
+      color: var(--text_color);
+      margin-right: 10px;
+    }
+
+    .zoom_slider {
+      width: 300px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div id="brightness_div">
+      <label>Color Pallet</label>
+      <div>
+        <select onchange="updateValue(this.id, this.value)" id="pseudo_color">
+          <option value="0">WHOT</option>
+          <option value="10">BHOT</option>
+        </select>
+      </div>
+    </div>
+    <div id="scene_div">
+      <label>Scene Mode</label>
+      <div>
+        <select onchange="updateValue(this.id, this.value)" id="scene_mode">
+          <option value="0">LowHighlight</option>
+          <option value="1">LinearStretch</option>
+          <option value="2">LowContrast</option>
+          <option value="3">GeneralMode</option>
+          <option value="4">HighContrast</option>
+          <option value="5">Highlight</option>
+          <option value="9">Outline</option>
+        </select>
+      </div>
+    </div>
+    <div id="edges_div">
+      <label>Edges</label>
+      <div>
+        <input style="width: 300px;" type="range" id="edge_enhancment_gear", min="0", max="2" value="0" oninput="updateValue(this.id, this.value)">
+      </div>
+    </div>
+    <div id="contrast_div">
+      <label>Contrast</label>
+      <div>
+        <input style="width: 300px;" type="range" id="contrast" min="0" max="100" value="0" oninput="updateValue(this.id, this.value)">
+      </div>
+    </div>
+    <div id="detail_div">
+      <label>Detail</label>
+      <div>
+        <input style="width: 300px;" type="range" id="detail_enhancement_gear" min="0" max="100" value="0" oninput="updateValue(this.id, this.value)">
+      </div>
+    </div>
+    <div id="burnprotection_div">
+      <label>Burn Protection</label>
+      <div>
+        <label class="switch">
+          <input id="burn_protection_en" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div id="autoshutter_div">
+      <label>Auto Shutter</label>
+      <div>
+        <label class="switch">
+          <input id="auto_shutter_en" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div id="breathing_div">
+      <label>Breathing</label>
+      <div>
+        <label class="switch">
+          <input id="breathing" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div id="corrected_div">
+      <label>Calibration</label>
+      <div>
+        <button onclick="updateValue('NUC', 1)">NUC</button>
+        <button onclick="updateValue('BG', 1)">BG</button>
+      </div>
+    </div>
+    <div id="save_div">
+      <label>Parameter</label>
+      <div>
+        <button onclick="updateValue('parameters_save', true)">Save</button>
+      </div>
+    </div>
+    <div id="save_div">
+      <label>Calibration</label>
+      <div style="display: flex; flex-direction: column;">
+        <input class="zoom_slider" type="range" id="zoom" min="10" max="15" value="10" onchange="updateZoom()">
+        <input class="zoom_slider" type="range" id="zoom_x" min="0" max="255" value="0" onchange="updateZoom()">
+        <input class="zoom_slider" type="range" id="zoom_y" min="0" max="191" value="0" onchange="updateZoom()">
+      </div>
+    </div>
+  </div>
+  <script>
+    function updateZoom() {
+      const zoom = parseInt(document.getElementById("zoom").value, 10);
+      const zoom_x = parseInt(document.getElementById("zoom_x").value, 10);
+      const zoom_y = parseInt(document.getElementById("zoom_y").value, 10);
+      fetch("/set", {
+        method: "POST",
+        body: JSON.stringify({ zoom: {
+          zoom: zoom,
+          x: zoom_x,
+          y: zoom_y
+        }})
+      });
+    }
+
+    function updateValue(key, value) {
+      const parsedValue = parseInt(value, 10);
+      console.log(`Updating ${key} with value: ${parsedValue}`);
+      fetch("/set", {
+        method: "POST",
+        body: JSON.stringify({ [key]: parsedValue })
+      }).then(response => {
+        if (key === "active_profile") {
+          sync_data();
+        }
+      });
+    }
+
+    function updateRemoteValue(key, source) {
+      updateValue(key, document.getElementById(source).value);
+    }
+
+    function sync_data() {
+      fetch('/get')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log("Syncing data:", data);
+        for (const key in data) {
+          if (key === "sensor_width") {
+            document.getElementById("zoom_x").max = data[key] - 1;
+          } else if (key === "sensor_height") {
+            document.getElementById("zoom_y").max = data[key] - 1;
+          } else if (key === "zoom_x") {
+            document.getElementById("zoom_x").value = data[key];
+          } else if (key === "zoom_y") {
+            document.getElementById("zoom_y").value = data[key];
+          } else if (key === "zoom") {
+            document.getElementById("zoom").value = data[key];
+          } else if (key === "auto_shutter_en" || key === "burn_protection_en" || key === "breathing") {
+            document.getElementById(key).checked = data[key];
+          } else {
+            const element = document.getElementById(key);
+            if (element === null) {
+              console.log("Cant find " + key);
+              continue;
+            }
+            element.value = data[key];
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Can\'t fetch from `/get`, values may be desynced', error);
+      });
+    }
+
+    sync_data();
+  </script>
+</body>
+</html>
