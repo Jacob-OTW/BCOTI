@@ -11,17 +11,17 @@ The unit is powered by a standard USB-C power source delivering 5v.
 
 ## Setting image settings
 
-The BCOTI uses the WiFi interface of the esp32 board to act as a web server to host a basic WebUI. To start the unit with WiFi enabled, 
+The BCOTI uses the Wi-Fi interface of the esp32 board to act as a web server to host a basic WebUI. To start the unit with Wi-Fi enabled, 
 
 1. hold down the push-button and then supply the unit with power, so either plug in your cable (given the poti is already enabled) or enable the poti, keep the button held down for a short moment, then let go.
 
-2. Open your phones WiFi settings and connect to "BCOTI", the password is "wifipass1234"
+2. Open your phones Wi-Fi settings and connect to "BCOTI", the password is "wifipass1234"
 
 3. Inside a web browser, open "192.168.4.1".
 
 4. At the top you select the active preset, so the one being both used by the unit in real time, and the one you make changes to.
 
-5. You can either enable or disable a preset, this determins if the preset will be used, or skipped when using the push button on the unit.
+5. You can either enable or disable a preset, this determines if the preset will be used, or skipped when using the push button on the unit.
 
 6. Once you made all your changes, reboot the unit to run it on the normal mode. Then use the push button to cycle through your active presets.
 
@@ -42,7 +42,7 @@ Expect to pay about 400€ (EU) or about 500usd (US) for parts when buying in sm
 | Toggle Switch                  | 1.19€  | [AliExpress ("3P 11.7ON-OFF-ON R" option)](https://www.aliexpress.us/item/1005008165436395.html)       |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | Poti w/ ON-OFF-switch          | 2.59€  | [AliExpress 5pc ("20K Ohm" option)](https://aliexpress.us/item/1005003523748492.html)                  | Can also be higher resistance value, for voltage divider, without current draw like here, it doesn't really matter                                                                                                                                                                                                                                                                                                                                 |
 | M2x4 Screws (11x)              | 1.35€  | [AliExpress 50pc (M2 x 50pc, 4mm length option)](https://www.aliexpress.us/item/1005008314123679.html) | I didn't use these exact ones, but should work, otherwise I adjust the hole size for the screw heads                                                                                                                                                                                                                                                                                                                                               |
-| M2x3 Heat Inserts (11x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes                                                                                                                                                                                                                                                                                                                            |
+| M2x3 Heat Inserts (11x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes. Should you get one with a smaller OD, the FreeCad file has a paramter for that.                                                                                                                                                                                                                                           |
 | 5mmD 25mmF DCX lens            | 41.61$ | [Edmund Optics](https://www.edmundoptics.com/p/5mm-dia-x-25mm-fl-uncoated-double-convex-lens/18171/)   | Price is really bad, but haven't found alternative yet.                                                                                                                                                                                                                                                                                                                                                                                            |
 | 6x8.5mm surface mirror         | 27.03$ | [Edmund Optics](https://www.edmundoptics.com/p/6-x-85mm-enhanced-aluminum-4-6lambda-mirror/5355/)      | Smaller one should work as well, but this is a safe bet while not having any ghosting issues.                                                                                                                                                                                                                                                                                                                                                      |
 | 3mm Elastic band (1m)          | 1,99€  | [AliExpress ("3mm 10meters" option)](https://www.aliexpress.us/item/1005008987955538.html)             | should be between 2mm and 3mm thickness, you won't actually need a meter, but cutting them to the right sizes sometimes takes a few tries.                                                                                                                                                                                                                                                                                                         |
@@ -148,7 +148,7 @@ Using Heat shrink for all connections where possible is recommended.
 
 8. Insert the push-button into the slot on the bottom of the shell, and fix it in place with the nut and washer.
 
-9. Wrap the O-Ring around the CameraCage, and insert the camera module (with the JST connector facing down, away from the slot in the top of the cage), then fix in place with all 6x M2x4 scews. Thighten them evenly, instead of doing one fully after the other.
+9. Wrap the O-Ring around the CameraCage, and insert the camera module (with the JST connector facing down, away from the slot in the top of the cage), then fix in place with all 6x M2x4 sews. Tighten them evenly, instead of doing one fully after the other.
 
 10. Check if the camera cage can be fully inserted without putting pressure on the display FPC or any components inside the shell.
 
@@ -156,14 +156,14 @@ Using Heat shrink for all connections where possible is recommended.
 
 12. Attach the Lens clip, Periscope, and Camera cage with the 11x M2x4 screws.
 
-13. Attach the unit to your NV device and check the alignment of the image. (Should the image be mirror incorrectly, adjust it via the WebUI's "Flip Mode" setting)
+13. Attach the unit to your NV device and check the alignment of the image. (Should the image be mirrored incorrectly, adjust it via the WebUI's "Flip Mode" setting)
     1. Attach the unit like shown in the picture, so hanging straight down from your NV unit
     <br>
     <img src="Resources/Assembly_Steps/Allignment_check_oriantation.jpg" alt="bottom_hanging allignment" width="450"/>
 
     2. If the thermal image is too far left or right, check that the camera cage is properly installed. This usually isn't an issue.
 
-    3. If the thermal image is too far up or down, you'll need to reprint the camera cage with a different offset. 1.2° down worked pretty well for me so far, but you can adjust it in the `Parameters` of the FreeCad file, then exporting the `CameraCage` again. If the image is too far up, then you need to reduce the angle, so that the camera looks up slightly more. If the image is too low, the angle needs to increase. There are a collection of differnet offsets in a `CAD_Files/Other_CameraCage_Offsets`
+    3. If the thermal image is too far up or down, you'll need to reprint the camera cage with a different offset. 1.2° down worked pretty well for me so far, but you can adjust it in the `Parameters` of the FreeCad file, then exporting the `CameraCage` again. If the image is too far up, then you need to reduce the angle, so that the camera looks up slightly more. If the image is too low, the angle needs to increase. There are a collection of different offsets in a `CAD_Files/Other_CameraCage_Offsets`
     <br>
     repeat this step until the unit is aligned well enough.
 
