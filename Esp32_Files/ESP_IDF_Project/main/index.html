@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DIY COTI</title>
+  <title>BCOTI</title>
   <style>
     :root {
       --text_color: aliceblue;
@@ -158,7 +158,23 @@
 </head>
 <body>
   <div class="main">
-    <div id="brightness_div">
+    <div id="preset_div">
+      <label>Preset</label>
+      <div>
+        <select onchange="updateValue(this.id, this.value)" id="active_profile">
+        </select>
+      </div>
+    </div>
+    <div id="preset_en_div">
+      <label>Preset Active</label>
+      <div>
+        <label class="switch">
+          <input id="preset_en" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div id="color_div">
       <label>Color Pallet</label>
       <div>
         <select onchange="updateValue(this.id, this.value)" id="pseudo_color">
@@ -239,7 +255,19 @@
         <button onclick="updateValue('parameters_save', true)">Save</button>
       </div>
     </div>
-    <div id="save_div">
+    <div id="flip_div">
+      <label>Flip Mode</label>
+      <div>
+        <select onchange="updateValue(this.id, this.value)" id="flip_mode">
+          <option value="0">No-Flip</option>
+          <option value="1">X-Flip</option>
+          <option value="2">Y-Flip</option>
+          <option value="3">XY-Flip</option>
+        </select>
+      </div>
+    </div>
+    <!-- Zoom doesn't work while the image is mirrored, so only works with special display driver.
+    <div id="zoom_div">
       <label>Calibration</label>
       <div style="display: flex; flex-direction: column;">
         <input class="zoom_slider" type="range" id="zoom" min="10" max="15" value="10" onchange="updateZoom()">
@@ -247,6 +275,7 @@
         <input class="zoom_slider" type="range" id="zoom_y" min="0" max="191" value="0" onchange="updateZoom()">
       </div>
     </div>
+    -->
   </div>
   <script>
     function updateZoom() {
@@ -298,8 +327,22 @@
             document.getElementById("zoom_y").value = data[key];
           } else if (key === "zoom") {
             document.getElementById("zoom").value = data[key];
-          } else if (key === "auto_shutter_en" || key === "burn_protection_en" || key === "breathing") {
+          } else if (key === "auto_shutter_en" || key === "burn_protection_en" || key === "breathing" || key === "preset_en") {
             document.getElementById(key).checked = data[key];
+          } else if (key === "preset_count") {
+            const select = document.getElementById("active_profile");
+            if (select.options.length === 0) {
+              select.innerHTML = ""; // Clear existing options
+              for (let i = 0; i < data[key]; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = `Preset ${i}`;
+                select.appendChild(option);
+              }
+            }
+          } else if (key === "active_profile") {
+              const select = document.getElementById("active_profile");
+              select.value = data[key];
           } else {
             const element = document.getElementById(key);
             if (element === null) {

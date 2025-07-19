@@ -206,6 +206,6 @@ void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset) {
     Mini2_set_detail_enhancement(cam, preset->detail_enhancement_gear);
     Mini2_set_burn_protection(cam, preset->burn_protection_en);
     Mini2_set_auto_shutter(cam, preset->auto_shutter_en);
-    Mini2_set_point_zoom(cam, preset->zoom_x, preset->zoom_y, preset->zoom);
+    // Mini2_set_point_zoom(cam, preset->zoom_x, preset->zoom_y, preset->zoom);
     Mini2_set_detector_fps(cam, preset->fps);
 }

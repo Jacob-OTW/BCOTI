@@ -11,6 +11,24 @@ The unit is powered by a standard USB-C power source delivering 5v.
 
 ## Setting image settings
 
+The BCOTI uses the WiFi interface of the esp32 board to act as a web server to host a basic WebUI. To start the unit with WiFi enabled, 
+
+1. hold down the push-button and then supply the unit with power, so either plug in your cable (given the poti is already enabled) or enable the poti, keep the button held down for a short moment, then let go.
+
+2. Open your phones WiFi settings and connect to "BCOTI", the password is "wifipass1234"
+
+3. Inside a web browser, open "192.168.4.1".
+
+4. At the top you select the active preset, so the one being both used by the unit in real time, and the one you make changes to.
+
+5. You can either enable or disable a preset, this determins if the preset will be used, or skipped when using the push button on the unit.
+
+6. Once you made all your changes, reboot the unit to run it on the normal mode. Then use the push button to cycle through your active presets.
+
+### Recommended Settings
+- Burn protection. This will automatically close the shutter of the thermal camera if you look at something very hot, like a fire, or the sun. Note that when the unit is not powered, the shutter is in the open position, so it's high recommended you cover the lens when the unit is not in use. Very hot object can burn the actual sensor.
+- Auto Shutter. This will do Non-Uni
+
 # Bill-of-materials
 Expect to pay about 400€ (EU) or about 500usd (US) for parts when buying in small quantities
 
@@ -51,11 +69,11 @@ Change the following
     <br>
     <img src="Resources/3d_printed_parts_Pictures/shell_button_extra_support.jpg" alt="Extra_support" width="300"/>
 
-2. Print the `Display_Spacer.step`, and `Mirror_Cover_Thin.step` with <= 0.1mm layer height, and initial layer height to <= 0.2mm
+2. Print the `Display_Spacer.step`, and `Mirror_Cover_Thin.step` with <= 0.1mm layer height, and initial layer height to <= 0.2mm. I'd highly recommend printing these parts out of a dark, as matte as possible filament, to prevent light reflecting inside the periscope
 <br>
 <img src="Resources/3d_printed_parts_Pictures/cover_and_spacer.jpg" alt="Cover_and_Spacer_3d_print" width="600"/>
 
-3. Print the periscope, pause it at the spot shown on the image (just after the slot for the mirror is done)
+3. Print the periscope, pause it at the spot shown on the image (just after the slot for the mirror is done). I'd highly recommend printing this part out of a dark, as matte as possible filament, to prevent light reflecting inside the periscope 
 <br>
 <img src="Resources/3d_printed_parts_Pictures/stem_print_pause.jpg" alt="Print_Pause_Location" width="600"/>
 <img src="Resources/3d_printed_parts_Pictures/Stem_Periscope.jpg" alt="Stem_Periscope_3d_print" width="200"/>
@@ -130,7 +148,7 @@ Using Heat shrink for all connections where possible is recommended.
 
 8. Insert the push-button into the slot on the bottom of the shell, and fix it in place with the nut and washer.
 
-9. Wrap the O-Ring around the CameraCage, and insert the camera module, then fix in place with least 2x of the screws (I used the top ones on the side)
+9. Wrap the O-Ring around the CameraCage, and insert the camera module (with the JST connector facing down, away from the slot in the top of the cage), then fix in place with all 6x M2x4 scews. Thighten them evenly, instead of doing one fully after the other.
 
 10. Check if the camera cage can be fully inserted without putting pressure on the display FPC or any components inside the shell.
 
@@ -138,14 +156,14 @@ Using Heat shrink for all connections where possible is recommended.
 
 12. Attach the Lens clip, Periscope, and Camera cage with the 11x M2x4 screws.
 
-13. Attach the unit to your NV device and check the alignment of the image.
+13. Attach the unit to your NV device and check the alignment of the image. (Should the image be mirror incorrectly, adjust it via the WebUI's "Flip Mode" setting)
     1. Attach the unit like shown in the picture, so hanging straight down from your NV unit
     <br>
     <img src="Resources/Assembly_Steps/Allignment_check_oriantation.jpg" alt="bottom_hanging allignment" width="450"/>
 
     2. If the thermal image is too far left or right, check that the camera cage is properly installed. This usually isn't an issue.
 
-    3. If the thermal image is too far up or down, you'll need to reprint the camera cage with a different offset. 1.5° down worked pretty well for me so far, but you can adjust it in the `Parameters` of the FreeCad file, then exporting the `CameraCage` again. If the image is too far up, then you need to reduce the angle, so that the camera looks up slightly more. If the image is too low, the angle needs to increase.
+    3. If the thermal image is too far up or down, you'll need to reprint the camera cage with a different offset. 1.2° down worked pretty well for me so far, but you can adjust it in the `Parameters` of the FreeCad file, then exporting the `CameraCage` again. If the image is too far up, then you need to reduce the angle, so that the camera looks up slightly more. If the image is too low, the angle needs to increase. There are a collection of differnet offsets in a `CAD_Files/Other_CameraCage_Offsets`
     <br>
     repeat this step until the unit is aligned well enough.
 

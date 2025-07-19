@@ -18,9 +18,9 @@
 
 #define TAG "MAIN"
 
-#define SSID "DIY_COTI"
+#define SSID "BCOTI"
 #define PASSWORD "wifipass1234"
-#define PRESET_COUNT 1
+#define PRESET_COUNT 5
 
 #define UART_TX GPIO_NUM_1
 #define UART_RX GPIO_NUM_2
@@ -43,19 +43,23 @@ typedef struct stored_values_t{
     value_preset_t presets[PRESET_COUNT];
 } stored_values_t;
 
+value_preset_t default_preset = {
+    .preset_en = false,
+    .pseudo_color = WHOT,
+    .scene_mode = Outline,
+    .flip_mode = X_Flip,
+    .av_format = PAL,
+    .contrast = 50,
+    .edge_enhancment_gear = 1,
+    .detail_enhancement_gear = 50,
+    .burn_protection_en = true,
+    .auto_shutter_en = true,
+    .fps = Hz50,
+    .breathing = false,
+};
+
 stored_values_t stored = {
     .active_preset = 0,
-    .presets = { 
-        {   
-            .scene_mode = GeneralMode,
-            .edge_enhancment_gear = 2,
-            .contrast = 50,
-            .detail_enhancement_gear = 50,
-            .av_format = PAL,
-            .fps = Hz50,
-        }
-    }
-
 };
 
 Mini2_t cam = {
@@ -77,10 +81,17 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base, int32_t e
     }
 }
 
+void next_preset() { // Preset0 is always seen  active, otherwise the esp32 could crash because it got stuck in a loop during ISR
+    stored.active_preset = (stored.active_preset + 1) % PRESET_COUNT;
+    if (stored.active_preset != 0 && !stored.presets[stored.active_preset].preset_en) {
+        next_preset();
+    }
+}
+
 void IRAM_ATTR button_isr_handler(void* arg) {
     if (esp_timer_get_time() - button_debouce > 200000) { // 200ms debounce
         button_debouce = esp_timer_get_time();
-        stored.active_preset = (stored.active_preset + 1) % PRESET_COUNT;
+        next_preset();
     };
 }
 
@@ -88,6 +99,8 @@ static void loop_task(void *pvParameters) {
     int max_gain = 0;
     int64_t breathing_time_out = 0;
     #define breathing_pause_time_us (2 * 1000 * 1000)
+
+    uint8_t last_seen_preset = stored.active_preset;
 
     adc_unit_t unit;
     adc_channel_t channel;
@@ -126,6 +139,10 @@ static void loop_task(void *pvParameters) {
             float value = (cos(((float)x_ms / 1000.0) * M_PI) + 1.0) / 2;
             // ESP_LOGW(TAG, "Set: %d from %f (value) and %d (max gain)", (int)(value * (float)max_gain), value, max_gain);
             Mini2_set_brightness(&cam, (int)(value * (float)max_gain));
+        }
+        if (stored.active_preset != last_seen_preset) {
+            Mini2_apply_preset(&cam, &stored.presets[stored.active_preset]);
+            last_seen_preset = stored.active_preset;
         }
         vTaskDelay(pdMS_TO_TICKS(50));
     }
@@ -166,14 +183,14 @@ static esp_err_t post_handler(httpd_req_t *req) {
         ret = json_obj_get_int(&jctx, "flip_mode", &value);
         if (ret == OS_SUCCESS) {
             Mini2_set_flip_mode(&cam, (enum FlipMode)value);
-            stored.presets[stored.active_preset].flip_mode = (enum PseudoColor)value;
+            stored.presets[stored.active_preset].flip_mode = (enum FlipMode)value;
         }
         ret = json_obj_get_int(&jctx, "av_format", &value);
         if (ret == OS_SUCCESS) {
             Mini2_set_analog_video_format(&cam, (enum AnalogVideoFormat)value);
             stored.presets[stored.active_preset].av_format = (enum PseudoColor)value;
         }
-        /*
+        /* Brightness is done via Poti, so no need
                 ret = json_obj_get_int(&jctx, "brightness", &value);
         if (ret == OS_SUCCESS) {
             Mini2_set_brightness(&cam, value);
@@ -213,6 +230,16 @@ static esp_err_t post_handler(httpd_req_t *req) {
             stored.presets[stored.active_preset].breathing = bool_val;
         }
 
+        ret = json_obj_get_bool(&jctx, "preset_en", &bool_val);
+        if (ret == OS_SUCCESS) {
+            if (stored.active_preset == 0) {
+                stored.presets[stored.active_preset].preset_en = true; // Preset0 is always enabled.
+            } else {
+                stored.presets[stored.active_preset].preset_en = bool_val;
+            }
+        }
+
+        /* Conflicts with Mirror feature
         ret = json_obj_get_object(&jctx, "zoom");
         if (ret == OS_SUCCESS) {
             int x, y, zoom;
@@ -224,6 +251,7 @@ static esp_err_t post_handler(httpd_req_t *req) {
             }
             json_obj_leave_object(&jctx);
         }
+        */
 
         ret = json_obj_get_int(&jctx, "active_profile", &value);
         if (ret == OS_SUCCESS) {
@@ -267,7 +295,9 @@ static esp_err_t post_handler(httpd_req_t *req) {
 
 static esp_err_t retireve_values(httpd_req_t *req) {
     static char out_format[] = "{ \
+    \"preset_count\": %u, \
     \"active_profile\": %u, \
+    \"preset_en\": %u, \
     \"pseudo_color\": %u, \
     \"scene_mode\": %u, \
     \"contrast\": %u, \
@@ -276,6 +306,7 @@ static esp_err_t retireve_values(httpd_req_t *req) {
     \"burn_protection_en\": %u, \
     \"auto_shutter_en\": %u, \
     \"breathing\": %u, \
+    \"flip_mode\": %u, \
     \"zoom\": %u, \
     \"zoom_x\": %u, \
     \"zoom_y\": %u, \
@@ -286,7 +317,9 @@ static esp_err_t retireve_values(httpd_req_t *req) {
     char out_json[512];
 
     int res = snprintf(out_json, sizeof(out_json), out_format,
+        PRESET_COUNT,
         stored.active_preset,
+        (uint8_t)stored.presets[stored.active_preset].preset_en,
         (uint8_t)stored.presets[stored.active_preset].pseudo_color,
         (uint8_t)stored.presets[stored.active_preset].scene_mode,
         stored.presets[stored.active_preset].contrast,
@@ -295,6 +328,7 @@ static esp_err_t retireve_values(httpd_req_t *req) {
         (uint8_t)stored.presets[stored.active_preset].burn_protection_en,
         (uint8_t)stored.presets[stored.active_preset].auto_shutter_en,
         (uint8_t)stored.presets[stored.active_preset].breathing,
+        (uint8_t)stored.presets[stored.active_preset].flip_mode,
         stored.presets[stored.active_preset].zoom,
         stored.presets[stored.active_preset].zoom_x,
         stored.presets[stored.active_preset].zoom_y,
@@ -389,6 +423,10 @@ void app_main(void) {
         vTaskDelay(pdMS_TO_TICKS(2000));
     } else {
         vTaskDelay(pdMS_TO_TICKS(5000));
+    }
+
+    for (int i=0; i<PRESET_COUNT; i++) {
+        stored.presets[i] = default_preset;
     }
     
     Mini2_init(&cam);

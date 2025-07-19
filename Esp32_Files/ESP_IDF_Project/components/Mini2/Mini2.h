@@ -64,6 +64,7 @@ enum AnalogVideoFormat {
 };
 
 typedef struct value_preset_t{
+    bool preset_en;
     enum PseudoColor pseudo_color;
     enum SceneMode scene_mode;
     enum FlipMode flip_mode;
