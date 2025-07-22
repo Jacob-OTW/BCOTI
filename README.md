@@ -79,6 +79,9 @@ Change the following
 <img src="Resources/3d_printed_parts_Pictures/Stem_Periscope.jpg" alt="Stem_Periscope_3d_print" width="200"/>
 <br>
 During the pause, insert the mirror, and mirror cover (with the hole in the cover facing to the top). After the print is done, press-fit the small 25mm DCX lens into place from the outside, for me this held very well, but I'll also add a part that can be glued in some time in the future.
+<br>
+<img src="Resources/Assembly_Steps/Mirror.jpg" alt="Mirror_in_periscope" width="600"/>
+<img src="Resources/Assembly_Steps/Mirror_Cover.jpg" alt="Mirror_cover_in_periscope" width="600"/>
 
 4. (Optional, but recommended) print the `Bikini_Cover_TPU.step` out of a fairly soft TPU. I printed mine out of 95A Overture TPU
 
