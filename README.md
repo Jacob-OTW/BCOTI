@@ -26,7 +26,7 @@ The BCOTI uses the Wi-Fi interface of the esp32 board to act as a web server to 
 6. Once you made all your changes, reboot the unit to run it on the normal mode. Then use the push button to cycle through your active presets.
 
 ### Recommended Settings
-- Burn protection. This will automatically close the shutter of the thermal camera if you look at something very hot, like a fire, or the sun. Note that when the unit is not powered, the shutter is in the open position, so it's high recommended you cover the lens when the unit is not in use. Very hot object can burn the actual sensor.
+- Burn protection. This will automatically close the shutter of the thermal camera if you look at something very hot, like a fire, or the sun. Note that when the unit is not powered, the shutter is in the open position, so it's highly recommended you cover the lens when the unit is not in use. Very hot object can burn the actual sensor.
 - Auto Shutter. This will do Non-Uni
 
 # Bill-of-materials
@@ -42,9 +42,9 @@ Expect to pay about 400€ (EU) or about 500usd (US) for parts when buying in sm
 | Toggle Switch                  | 1.19€  | [AliExpress ("3P 11.7ON-OFF-ON R" option)](https://www.aliexpress.us/item/1005008165436395.html)       |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | Poti w/ ON-OFF-switch          | 2.59€  | [AliExpress 5pc ("20K Ohm" option)](https://aliexpress.us/item/1005003523748492.html)                  | Can also be higher resistance value, for voltage divider, without current draw like here, it doesn't really matter                                                                                                                                                                                                                                                                                                                                 |
 | M2x4 Screws (11x)              | 1.35€  | [AliExpress 50pc (M2 x 50pc, 4mm length option)](https://www.aliexpress.us/item/1005008314123679.html) | I didn't use these exact ones, but should work, otherwise I adjust the hole size for the screw heads                                                                                                                                                                                                                                                                                                                                               |
-| M2x3 Heat Inserts (11x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes. Should you get one with a smaller OD, the FreeCad file has a paramter for that.                                                                                                                                                                                                                                           |
+| M2x3 Heat Inserts (11x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes. Should you get one with a smaller OD, the FreeCad file has a parameter for that.                                                                                                                                                                                                                                          |
 | 5mmD 25mmF DCX lens            | 41.61$ | [Edmund Optics](https://www.edmundoptics.com/p/5mm-dia-x-25mm-fl-uncoated-double-convex-lens/18171/)   | Price is really bad, but haven't found alternative yet.                                                                                                                                                                                                                                                                                                                                                                                            |
-| 6x8.5mm surface mirror         | 27.03$ | [Edmund Optics](https://www.edmundoptics.com/p/6-x-85mm-enhanced-aluminum-4-6lambda-mirror/5355/)      | Smaller one should work as well, but this is a safe bet while not having any ghosting issues.                                                                                                                                                                                                                                                                                                                                                      |
+| 5x5x5mm right-angle-prism      | 1.99€  | [AliExpress](https://www.aliexpress.com/item/1005008430325318.html)                                    | This replaces the surface mirror used in previous versions, look into the change history for more info.                                                                                                                                                                                                                                                                                                                                            |
 | 3mm Elastic band (1m)          | 1,99€  | [AliExpress ("3mm 10meters" option)](https://www.aliexpress.us/item/1005008987955538.html)             | should be between 2mm and 3mm thickness, you won't actually need a meter, but cutting them to the right sizes sometimes takes a few tries.                                                                                                                                                                                                                                                                                                         |
 | 26AWG Silicone wire            | 10.29€ | [AliExpress ("26 AWG 60m" option)](https://www.aliexpress.us/item/1005005450546335.html)               | Any 26AWG (or close to) silicone wire will work, would recommend least 3 unique colors though.                                                                                                                                                                                                                                                                                                                                                     |
 | O-Ring OD32 CS3.1              | 2.49€  | [AliExpress 50pc ("OD32mm CS3.1mm" option)](https://www.aliexpress.us/item/1005008292700053.html)      | Kinda optional, it by itself won't water proof the housing, as there are other way water can still get in besides the edge of the camera-cage, but it's a start.                                                                                                                                                                                                                                                                                   |
@@ -55,6 +55,8 @@ Expect to pay about 400€ (EU) or about 500usd (US) for parts when buying in sm
 # Build-Guide
 
 ## 3d printed parts
+
+Using a dark material which absorbs light instead of reflecting it is highly recommend.
 
 1. Print the `Body_Shell.step`, `PVS14_Lens_Clip.step`, and `Camera_Cage_x_x_deg.step` with a basic 0.12mm layer height profile.
 Change the following
@@ -69,22 +71,13 @@ Change the following
     <br>
     <img src="Resources/3d_printed_parts_Pictures/shell_button_extra_support.jpg" alt="Extra_support" width="300"/>
 
-2. Print the `Display_Spacer.step`, and `Mirror_Cover_Thin.step` with <= 0.1mm layer height, and initial layer height to <= 0.2mm. I'd highly recommend printing these parts out of a dark, as matte as possible filament, to prevent light reflecting inside the periscope
+2. Print the periscope like shown in the picture. <=0.12mm layer height, and I'd recommend "Snug" supports.
 <br>
-<img src="Resources/3d_printed_parts_Pictures/cover_and_spacer.jpg" alt="Cover_and_Spacer_3d_print" width="600"/>
+<img src="Resources/3d_printed_parts_Pictures/Periscope.png" alt="Periscope print oriantation" width="600"/>
+<br>
+After the print, press fit the prism and DCX lens into the periscope. After checking functionally, you can glue on the side cover
 
-3. Print the periscope, pause it at the spot shown on the image (just after the slot for the mirror is done). I'd highly recommend printing this part out of a dark, as matte as possible filament, to prevent light reflecting inside the periscope 
-<br>
-<img src="Resources/3d_printed_parts_Pictures/stem_print_pause.jpg" alt="Print_Pause_Location" width="600"/>
-<img src="Resources/3d_printed_parts_Pictures/Stem_Periscope.jpg" alt="Stem_Periscope_3d_print" width="200"/>
-<br>
-During the pause, insert the mirror, and mirror cover (with the hole in the cover facing to the top). After the print is done, press-fit the small 25mm DCX lens into place from the outside, for me this held very well, but I'll also add a part that can be glued in some time in the future.
-<br>
-<img src="Resources/Assembly_Steps/Mirror.jpg" alt="Mirror_in_periscope" width="600"/>
-<img src="Resources/Assembly_Steps/Mirror_Cover.jpg" alt="Mirror_cover_in_periscope" width="600"/>
-
-4. (Optional, but recommended) print the `Bikini_Cover_TPU.step` out of a fairly soft TPU. I printed mine out of 95A Overture TPU
-
+3. (Optional, but recommended) print the `Bikini_Cover_TPU.step` out of a fairly soft TPU. I printed mine out of 95A Overture TPU
 
 ## Electronics
 
@@ -166,7 +159,5 @@ Using Heat shrink for all connections where possible is recommended.
 
     2. If the thermal image is too far left or right, check that the camera cage is properly installed. This usually isn't an issue.
 
-    3. If the thermal image is too far up or down, you'll need to reprint the camera cage with a different offset. 1.2° down worked pretty well for me so far, but you can adjust it in the `Parameters` of the FreeCad file, then exporting the `CameraCage` again. If the image is too far up, then you need to reduce the angle, so that the camera looks up slightly more. If the image is too low, the angle needs to increase. There are a collection of different offsets in a `CAD_Files/Other_CameraCage_Offsets`
-    <br>
-    repeat this step until the unit is aligned well enough.
+    3. If the thermal image is too far up or down, you can reprint the CameraCage with a different offset. If it the overlay it too high, the camera needs to loke up more. I plan to have a way of mechanically adjusting the camera position via screws, but this is not ready yet.
 
