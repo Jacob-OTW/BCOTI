@@ -119,6 +119,8 @@ A full video guide is also available, but I'd recommend have the written instruc
 
 ## 3d printed parts
 
+If you're going to have these parts MJF printed (not recommended during beta), then feel free to use my [JLC3DP referral code](https://jlc3dp.com/?from=jacobotw)
+
 1. Print the following parts
     - `Back_Body.step`
     - `x_Lens_Front_Body.step` (Print the one appropriate for the type of lens on your camera module)
