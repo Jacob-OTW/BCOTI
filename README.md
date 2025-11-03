@@ -9,36 +9,76 @@ The unit is powered by a standard USB-C power source delivering 5v.
 
 # User Manual
 
-## Setting image settings
+## Powering the unit
+BCOTI by default needs a 5v USB-C power source. The cable you use must be USB-A to USB-C.
+
+## Attaching it to an NV device
+You'll need a mounting-adapter that fits your specific device, which then mounted on the rail of the BCOTI. The most common style mounts via a clamp right behind the front lens.
+
+ensure that the BCOTI sits straight in front of your front lens, not doing so will cause the overlay not to be centred in the IIT view.
+
+## Setting the brightness
+1. Which the unit attached to your NV device, turn it on
+2. Turn the knob on the back to the lowest brightness position.
+3. Set the display brightness to a level where the rectangle shape of the display is not just about not visible anymore, using the outer two buttons on the side of the unit.
+4. Now turn up the knob on the back to the desired threshold level.
+
+Setting the brightness may need to be done again if lighting conditions change.
+
+## Switching modes.
+By default, the unit will have three modes
+- Outline
+- Highlight (Outdoor)
+- Highlight (Indoor)
+
+To cycle through them, press the middle button on the side of the unit.
+
+## Configuring new modes.
 
 The BCOTI uses the Wi-Fi interface of the esp32 board to act as a web server to host a basic WebUI. To start the unit with Wi-Fi enabled, 
 
-1. hold down the push-button and then supply the unit with power, so either plug in your cable (given the poti is already enabled) or enable the poti, keep the button held down for a short moment, then let go.
+1. Insure the knob on the back is in the off-position.
 
-2. Open your phones Wi-Fi settings and connect to "BCOTI", the password is "wifipass1234"
+2. Start holding down the middle button
 
-3. Inside a web browser, open "192.168.4.1".
+3. Turn the knob on the back to the on-position
 
-4. At the top you select the active preset, so the one being both used by the unit in real time, and the one you make changes to.
+4. Continue holding the middle button for about 5s, then let go.
 
-5. You can either enable or disable a preset, this determines if the preset will be used, or skipped when using the push button on the unit.
+5. Open your phones Wi-Fi settings and connect to "BCOTI", the password is "wifipass1234"
 
-6. Once you made all your changes, reboot the unit to run it on the normal mode. Then use the push button to cycle through your active presets.
+6. Once connected Inside a web browser, open "192.168.4.1".
+
+7. At the top you select the active preset, that the unit is showing, and to which you make changes.
+
+8. In order for a preset to be available to be selected via the button, it must be active.
+
+9. Once you made all your changes, reboot the unit to run it on the normal mode. Then use the push button to cycle through your active presets.
 
 * If the local webpage won't load, try disabling your mobile-data, this is an issue with some OS that won't actually try and use the Wi-Fi network because it does not provide an internet connection. On IPhone this usually isn't an issue.
 
-### Recommended Settings
-- Burn protection. This will automatically close the shutter of the thermal camera if you look at something very hot, like a fire, or the sun. Note that when the unit is not powered, the shutter is in the open position, so it's highly recommended you cover the lens when the unit is not in use. Very hot object can burn the actual sensor. Burn protection has nothing to do with protecting your tube!
-- Auto Shutter. This will do Non-Uniformity-Correction (NUCing) based on conditions decided by the camera (temperature mostly).
+## Side effect "features"
+Because of BCOTIs off-the-shelf parts nature, there are some features that might be confusing or annoying.
 
-- Correct Brightness Setting. To get a good brightness setting, I'd recommend:
-    1. Use the potentiometer to fully turn down the brightness of the camera.
-    2. Set your display brightness one step below the step where you're able to see the shape of the display in IIT image.
-    3. Raise brightness to the desired threshold.
+### Image orientation
+Recent orders for the display, and those from the US-group-buy include a display driver which has the ability to mirror the image. This allows for digital alignment of the overlay, to make it easier to perfectly line up with your IIT image. 
 
-    This may need to be done on the fly if you're environment changes, like when going from indoors, to outdoors.
+Switching the image orientation of the driver is done via the brightness+ button. 
 
-- Scene mode. While the Mini2 offer many scene modes, for the BCOTI only `Highlight` and `Outline` really make sense, adjust contest as you see fit.
+- Holding down the button for about 4s while the unit is on, will mirror on the X-Axis.
+
+- Holding down the button before turning the unit on, and then holding continuing to hold it until you see the orientation change, switches the Y-Axis.
+
+There is no way to lock the image origination, so in case you accidentally change it, you'll need to change it back via the same controls.
+
+### Color modes.
+The display driver has three colors modes, intended for standalone units. The modes are:
+
+- Full-color
+- Green
+- Blue
+
+To cycle through them, hold down the brightness- button for about 4s. For the BCOTI you always want to use the full-color mode (combined with WHOT from the camera module), as the other two modes also color in the background, instead of leaving it black.
 
 # Bill-of-materials
 Expect to pay about 400€ (EU) or about 500usd (US) for parts when buying in small quantities
@@ -47,139 +87,79 @@ If you do end up buying these parts, and are happy with the end result, I'd appr
 
 Some of the links are affiliate links, which means I make a small commission on your purchase, at no added cost to you.
 
-| Part                           | Cost   | Link                                                                                                   | Comment                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|--------------------------------|--------|--------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Mini2                          | 189€   | [AliExpress (256 9.1mm option)](https://s.click.aliexpress.com/e/_ooB5Db9)                             | Only the 256 w/ 9.1mm version will work, others won't be 1x with current setup. [Hdaniee Store page incase the link doesn't work](https://www.aliexpress.com/store/1104212749?spm=a2g0o.detail.0.0.5c38Uf2FUf2Fd3), CV256 9.1mm. [For Some it might also be much cheaper to buy on Alibaba](https://www.alibaba.com/product-detail/HDANIEE-Series-Thermal-Imaging-Camera-Module_1601290252342.html?spm=a27aq.27095423.1978240560.1.78372277Z3cl82) |
-| LZE039 OLED                    | 98€    | [AliExpress (AV 3color option)](https://s.click.aliexpress.com/e/_oCvDQUx)                             | Bare screen + AV driver.                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| Esp32c3 Super Mini             | 2.6€   | [AliExpress](https://s.click.aliexpress.com/e/_oCkdBST)                                                | They can break during assembly, I'd recommend a 5pc for safety.                                                                                                                                                                                                                                                                                                                                                                                    |
-| USB-C Connector Breakout (1x+) | 2.25€  | [AliExpress 2pc ("TYPE-C male 4P" option)](https://s.click.aliexpress.com/e/_oCcvkCx)                  | At least 1x for device internal, but can also be used to created really low profile cable for helmet setup.                                                                                                                                                                                                                                                                                                                                        |
-| USB-C Port                     | 1.49€  | [AliExpress ("4P Black" option)](https://www.aliexpress.us/item/1005005768848819.html)                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| Toggle Switch                  | 1.19€  | [AliExpress ("3P 11.7ON-OFF-ON R" option)](https://s.click.aliexpress.com/e/_omETDcf)                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| Poti w/ ON-OFF-switch          | 2.59€  | [AliExpress 5pc ("20K Ohm" option)](https://s.click.aliexpress.com/e/_omefAub)                         | Can also be higher resistance value, for voltage divider, without current draw like here, it doesn't really matter                                                                                                                                                                                                                                                                                                                                 |
-| M2x4 Screws (11x)              | 1.35€  | [AliExpress 50pc (M2 x 50pc, 4mm length option)](https://www.aliexpress.us/item/1005008314123679.html) | I didn't use these exact ones, but should work, otherwise I adjust the hole size for the screw heads                                                                                                                                                                                                                                                                                                                                               |
-| M2x3 Heat Inserts (11x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes. Should you get one with a smaller OD, the FreeCad file has a parameter for that.                                                                                                                                                                                                                                          |
-| 5mmD 25mmF DCX lens            | 41.61$ | [Edmund Optics](https://www.edmundoptics.com/p/5mm-dia-x-25mm-fl-uncoated-double-convex-lens/18171/)   | Price is really bad, but haven't found alternative yet.                                                                                                                                                                                                                                                                                                                                                                                            |
-| 5x5x5mm right-angle-prism      | 1.99€  | [AliExpress](https://s.click.aliexpress.com/e/_oBrJOrZ)                                                | This replaces the surface mirror used in previous versions, look into the change history for more info. [If the link doesn't work, try this one](https://www.aliexpress.com/item/4001089104491.html)                                                                                                                                                                                                                                               |
-| 3mm Elastic band (1m)          | 1,99€  | [AliExpress ("3mm 10meters" option)](https://s.click.aliexpress.com/e/_oCvMedl)                        | should be between 2mm and 3mm thickness, you won't actually need a meter, but cutting them to the right sizes sometimes takes a few tries.                                                                                                                                                                                                                                                                                                         |
-| 26AWG Silicone wire            | 10.29€ | [AliExpress ("26 AWG 60m" option)](https://s.click.aliexpress.com/e/_oFwRszV)                          | Any 26AWG (or close to) silicone wire will work, would recommend least 3 unique colors though.                                                                                                                                                                                                                                                                                                                                                     |
-| O-Ring OD32 CS3.1              | 2.49€  | [AliExpress 50pc ("OD32mm CS3.1mm" option)](https://s.click.aliexpress.com/e/_oCdiWvV)                 | Kinda optional, it by itself won't water proof the housing, as there are other way water can still get in besides the edge of the camera-cage, but it's a start.                                                                                                                                                                                                                                                                                   |
-| 7mm Momentary Button           | 2.99€  | [AliExpress 5pc ("PBS-110 NO Black") option](https://s.click.aliexpress.com/e/_oDDiMzH)                |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| 1.25mm 5pin jst cable          | 2.69€  | [AliExpress ("5set 5pin" option)](https://s.click.aliexpress.com/e/_olXJtVt)                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| Heat shrink tubes              | 1.69€  | [AliExpress](https://www.aliexpress.us/item/1005008858472748.html)                                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| Additional Part for lens clip  |        |                                                                                                        | Some of the mounting clip designs may require additional parts, like longer M2 screws, check the `CAD_Files/MountingClips/README.md` for more info.                                                                                                                                                                                                                                                                                                |
+| Part                           | Cost   | Link                                                                                                    | Comment                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|--------------------------------|--------|---------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Mini2                          | 189€   | [AliExpress (256 9.1mm option)](https://s.click.aliexpress.com/e/_ooB5Db9)                              | Only the 256 w/ 9.1mm version will work, others won't be 1x with current setup. [Hdaniee Store page incase the link doesn't work](https://www.aliexpress.com/store/1104212749?spm=a2g0o.detail.0.0.5c38Uf2FUf2Fd3), CV256 9.1mm. [For Some it might also be much cheaper to buy on Alibaba](https://www.alibaba.com/product-detail/HDANIEE-Series-Thermal-Imaging-Camera-Module_1601290252342.html?spm=a27aq.27095423.1978240560.1.78372277Z3cl82) |
+| LZE039 OLED                    | 98€    | [AliExpress (AV 3color option)](https://s.click.aliexpress.com/e/_oCvDQUx)                              | Bare screen + AV driver.                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Esp32c3 Super Mini             | 2.6€   | [AliExpress](https://s.click.aliexpress.com/e/_oCkdBST)                                                 | They can break during assembly, I'd recommend a 5pc for safety.                                                                                                                                                                                                                                                                                                                                                                                    |
+| USB-C Connector Breakout (1x+) | 2.25€  | [AliExpress 2pc ("TYPE-C male 4P" option)](https://s.click.aliexpress.com/e/_oCcvkCx)                   | At least 1x for device internal, but can also be used to created really low profile cable for helmet setup.                                                                                                                                                                                                                                                                                                                                        |
+| USB-C Port                     | 1.49€  | [AliExpress ("4P Black" option)](https://www.aliexpress.us/item/1005005768848819.html)                  |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Row of buttons                 | 1.19€  | [AliExpress ("3 bit" option)](https://s.click.aliexpress.com/e/_c3XvcmrD)                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Poti w/ ON-OFF-switch          | 2.59€  | [AliExpress 5pc ("20K Ohm" option)](https://s.click.aliexpress.com/e/_omefAub)                          | Can also be higher resistance value, for voltage divider, without current draw like here, it doesn't really matter                                                                                                                                                                                                                                                                                                                                 |
+| M2x4 Screws (10x)              | 1.35€  | [AliExpress 50pc (M2 x 50pc, 4mm length option)](https://www.aliexpress.us/item/1005008314123679.html)  |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| M2x12 Screws (4x)              | 1.35€  | [AliExpress 50pc (M2 x 50pc, 12mm length option)](https://www.aliexpress.us/item/1005008314123679.html) |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| M2x3 Heat Inserts (14x)        | 9.99€  | [CNCKitchen 100pc](https://cnckitchen.store/products/heat-set-insert-m2-x-3-100-pieces)                 | Could also get cheaper ones in similar size, but I like these because they give good info about the required hole sizes. Should you get one with a smaller OD, the FreeCad file has a parameter for that.                                                                                                                                                                                                                                          |
+| 5mmD 25mmF DCX lens            | 41.61$ | [USA Source](https://partkits.com/products/5mm-x-25mm-efl-lens)                                         | Can also be bought from [Edmund Optics](https://www.edmundoptics.com/p/5mm-dia-x-25mm-fl-uncoated-double-convex-lens/18171/) or [OptoSigma](https://www.optosigma.com/eu_de/catalog/product/view/id/41346/s/biconvex-lens-5mm-diameter-25-2mm-focal-length-uncoated/category/23/) both can have fairly long lead times though. If you're outside the US, especially in the EU, send me an email, and I'll help you find one                        |
+| 5x5x5mm right-angle-prism      | 1.99€  | [AliExpress](https://s.click.aliexpress.com/e/_oBrJOrZ)                                                 | [If the link doesn't work, try this one](https://www.aliexpress.com/item/4001089104491.html)                                                                                                                                                                                                                                                                                                                                                       |
+| 3mm Elastic band (1m)          | 1,99€  | [AliExpress ("3mm 10meters" option)](https://s.click.aliexpress.com/e/_oCvMedl)                         | should be between 2mm and 3mm thickness, you won't actually need a meter, but cutting them to the right sizes sometimes takes a few tries.                                                                                                                                                                                                                                                                                                         |
+| 26AWG Silicone wire            | 10.29€ | [AliExpress ("26 AWG 60m" option)](https://s.click.aliexpress.com/e/_oFwRszV)                           | Any 26AWG (or close to) silicone wire will work, would recommend least 3 unique colors though.                                                                                                                                                                                                                                                                                                                                                     |
+| 1.25mm 5pin jst cable          | 2.69€  | [AliExpress ("5set 5pin" option)](https://s.click.aliexpress.com/e/_olXJtVt)                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Heat shrink tubes              | 1.69€  | [AliExpress ("127pcs black Bagged" option)](https://s.click.aliexpress.com/e/_c3RdV28F)                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 # Build-Guide
 
-## Build Guide Video
+## (Still outdated) Build Guide Video
 
 A full video guide is also available, but I'd recommend have the written instructions open as well, as any comments or changes will be made there.
 
 ### Important Notes
 - The momentary push button is now connected to GPIO8 (was GPIO21)
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/oMnXicHUu7w/0.jpg)](https://www.youtube.com/watch?v=oMnXicHUu7w)
+[![Video Guide](https://img.youtube.com/vi/oMnXicHUu7w/0.jpg)](https://www.youtube.com/watch?v=oMnXicHUu7w)
 
 ## 3d printed parts
 
-Using a dark material which absorbs light instead of reflecting it is highly recommend.
+1. Print the following parts
+    - `Back_Body.step`
+    - `x_Lens_Front_Body.step` (Print the one appropriate for the type of lens on your camera module)
+    - `Display_Spacer.step`
+    - `Zoomed_Periscope.step` (if you have an older display driver, check the legacy folder for infos!)
+    - `Periscope_Cover.step`
+    - `Side_Cover.step`
+    - `Knob_Cover.step`
+    - Mounting ring for your specific NV unit (Found in the `CAD_Files/MountingClips` folder)
 
-1. Print the `Body_Shell.step`, and CameraCage (The fixed-focus, or manual-focus one, depending on which one you got, Hdaniee doesn't seem to be consistent with the style of lens they ship) with a basic 0.12mm layer height profile.
-Change the following
-    1. Wall-loops to 3x or 4x. 
+    as shown in the image below.
+    
+    Change the following
+    1. Wall-loops to 3x
     2. Infill to about 22% to 35%
-    3. Support to tree
 
+    <img src="Resources/3d_printed_parts_Pictures/Shell_Clip_and_CameraCage.jpg" alt="Main Body Parts" width="450"/>
     <br>
-    <img src="Resources/3d_printed_parts_Pictures/Shell_Clip_and_CameraCage.jpg" alt="Shell_clip_and_cage_3d_printing" width="450"/>
-    <br>
-    I'd recommend adding extra support to the push-button mount hole on the housing shell
-    <br>
-    <img src="Resources/3d_printed_parts_Pictures/shell_button_extra_support.jpg" alt="Extra_support" width="300"/>
 
-2. Print the periscope like shown in the picture. <=0.12mm layer height, and I'd recommend "Snug" supports.
-<br>
-<img src="Resources/3d_printed_parts_Pictures/Periscope.png" alt="Periscope print oriantation" width="600"/>
-<br>
-After the print, press fit the prism and DCX lens into the periscope. After checking functionally, you can glue on the side cover
+    Only the Front and Back part will necessarily need supports. You may want to manually add them via the slicer, even if the printed thinks it can bridge them.
 
-3. (Optional, but recommended) print the `Bikini_Cover_TPU.step` out of a fairly soft TPU. I printed mine out of 95A Overture TPU
+2. Print the following parts out of a fairly flexible TPU (I used 95A from Overture)
+    - `TPU_Gasket.step`
+    - `TPU_Lens_Cover.step`
+    - `TPU_Button_Cover.step`
+    Like shown in the image below
+
+    <img src="Resources/3d_printed_parts_Pictures/TPU_Parts.jpg" alt="Main Body Parts" width="450"/>
+    <br>
+    Add supports to `TPU_Button_Cover.step`, I used Snug supports. 
 
 ## Electronics
 
-<img src="Resources/Schematic_BCOTI_mk1.png" alt="wiring_diagram" width="1000"/>
+<img src="Resources/Schematic_BCOTI_V2.png" alt="wiring_diagram" width="1000"/>
 
 ### Step-by-step
 
 Using Heat shrink for all connections where possible is recommended.
 
-1. Cut the cables of the USB-C port to a length of around 80mm.
-2. Cut a 1x 80mm piece of (Red) wire. And 3x 40mm pieces of (Red) Wire. These will be your 5V-net. Strip a portion of the installation on one side so that you can twist together the 3x short pieces, then cover in solder.
-3. Cut 5x 40mm pieces of black wire. These will be your ground-net. Strip one side and combine the 5pieces, same as you did for the 5v-net.
-4. Solder the 80mm piece of (Red) wire, to the potentiometer's on-off-switch.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/Poti_on_off_switch.jpg" alt="Poti_On_Off_Switch" width="450"/>
-(picture shows USB-C Port wire already connector, this is done during assembly)
 
-5. Solder the bundle of 3 (Red) wires to the 80mm piece from the previous step.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/5v_net.jpg" alt="5v_net" width="350"/>
-
-6. Attach the 5v wires, as well as ground to the USB-C breakout board, the display driver connector, and the camera connector, as shown in the diagram.
-
-7. Connect ground wires to the push-button, and on-off-on toggle switch.
-
-8. Cut a 50mm piece of wire, solder one end to the push button, and the other to under side, facing inwards to the esp32c3's GPIO8 pin.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/push_button.jpg" alt="Push_button" width="450"/>
-9. Cut the `brightness+` and `brightness-` cables of the display driver to a length of about 70mm, then attach them to the `on`-terminals of the toggle-switch.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/display_brightness.jpg" alt="Brightness_switch" width="450"/>
-10. Connect the white wire of the usb-c port to the D- Pad of the USB-C breakout board, and the blue wire to D+.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/5v_usb.jpg" alt="USB_C_Port_to_connector" width="450"/>
-11. Connect the RX wire of the camera to GPIO1, and the TX wire to GPIO2 of the esp32c3 board. The cables should be attached on the underside facing inwards.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/UART_lines.jpg" alt="UART_lines" width="450"/>
-12. Using 3x 50mm pieces of wire, connect the potentiometer to the esp32 board like shown in the schematic. Ground should be on the left, sense-wire (GPIO4) in the centre, and 3.3v on the right, that way the power goes from 0v to 3.3v when it's turned up, instead of being reversed.
-<br>
-<img src="Resources/Electronics_Steps_Pictures/poti.jpg" alt="Poti_Voltage_Dividier" width="450"/>
-13. Connect the Video-out of the camera to the `CVBS+` cable of the display driver. Total wire length is recommended at 130mm. 
 
 ## Assembly
 
-1. Insert the USB-C Port into the housing.
 
-2. Solder the 5v wire of the Port to the on-off-switch of the potentiometer
-
-3. Insert the potentiometer into the shell (from the inside) with the pins pointing down, and fix in place the with the Nut and washer.
-<br>
-<img src="Resources/Assembly_Steps/Poti_oriantation.png" alt="potentiometer oriantation" width="450"/>
-
-4. Insert the Brightness Toggle switch (horizontal orientation), and fix in place with washer and nut.
-<br>
-<img src="Resources/Assembly_Steps/Toggle_Switch_Oriantation.jpg" alt="toggle switch oriantation" width="450"/>
-
-5. With the USB-Port facing down, and the usb-c breakout connector inserted, insert the esp32 board into the centre slot of the shell
-<br>
-<img src="Resources/Assembly_Steps/Slots.jpg" alt="Shell Slots" width="450"/>
-
-6. Disconnect the display from the driver, and insert the FPC through the hole of the slot for the display.
-
-7. Connect the display to the driver again, then insert the driver (with the wires pointing into the shell) into the slot.
-
-8. Insert the push-button into the slot on the bottom of the shell, and fix it in place with the nut and washer.
-
-9. Wrap the O-Ring around the CameraCage, and insert the camera module (with the JST connector facing down, away from the slot in the top of the cage), then fix in place with all 6x M2x4 sews. Tighten them evenly, instead of doing one fully after the other.
-
-10. Check if the camera cage can be fully inserted without putting pressure on the display FPC or any components inside the shell.
-
-11. Insert the 11x heat inserts into the holes with your soldering iron.
-
-12. Attach the Lens clip, Periscope, and Camera cage with the 11x M2x4 screws.
-
-13. Attach the unit to your NV device and check the alignment of the image. (Should the image be mirrored incorrectly, adjust it via the WebUI's "Flip Mode" setting)
-    1. Attach the unit like shown in the picture, so hanging straight down from your NV unit
-    <br>
-    <img src="Resources/Assembly_Steps/Allignment_check_oriantation.jpg" alt="bottom_hanging allignment" width="450"/>
-
-    2. Look at a far object (20m+ ideally), and check how well the overlay lines up with the IIT image. If the image is too far in a certain direction, the camera needs to face more towards that direction; so if the image is too far left, you need to tighten the left screws (and maybe loosen the right ones). You'll need to repeat this a few times until the overlay is well enough aligned. Should there not be enough play in the camera cage to properly line up the image, you can print the camera cage with a pitch or yaw offset, 0° to 2° pitch in 0.1°-steps are available in the `CAD_Files\Other_CameraCage_Offsets`-folder, but usually this isn't necessary.
