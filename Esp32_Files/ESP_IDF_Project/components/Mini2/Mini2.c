@@ -289,12 +289,17 @@ void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset, alignment_preset_t
         Mini2_set_detector_fps(cam, alignment->fps);
     }
 
+    Mini2_set_flip_mode(cam, alignment->flip_mode);
+    if (alignment->flip_mode == No_Flip) {
+        Mini2_set_centre_zoom(cam, 10);
+    }
+
+    vTaskDelay(pdMS_TO_TICKS(250));
+
     for (int i=0; i<3; i++) { // Newer Cam modules seem to have an issue with getting the command, but not applying it, resending insures that is does.
         if (alignment->flip_mode == No_Flip) {
-            Mini2_set_flip_mode(cam, No_Flip);
             Mini2_set_point_zoom(cam, alignment->zoom_x, alignment->zoom_y, alignment->zoom);
         } else {
-            Mini2_set_centre_zoom(cam, 10);
             Mini2_set_flip_mode(cam, alignment->flip_mode);
         }
         vTaskDelay(pdMS_TO_TICKS(50));

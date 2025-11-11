@@ -317,6 +317,7 @@ static esp_err_t post_handler(httpd_req_t *req) {
     if (ret == OS_SUCCESS) {
         int x, y, zoom;
         if (json_obj_get_int(&jctx, "x", &x) == OS_SUCCESS && json_obj_get_int(&jctx, "y", &y) == OS_SUCCESS && json_obj_get_int(&jctx, "zoom", &zoom) == OS_SUCCESS) {
+            Mini2_set_flip_mode(&cam, No_Flip);
             Mini2_set_point_zoom(&cam, (uint16_t)x, (uint16_t)y, (uint8_t)zoom);
             stored.alignment.zoom = zoom;
             stored.alignment.zoom_x = x;

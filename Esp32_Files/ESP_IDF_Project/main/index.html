@@ -371,7 +371,12 @@
           } else if (key === "zoom") {
             document.getElementById("zoom").value = data[key];
           } else if (key === "auto_shutter_en" || key === "burn_protection_en" || key === "breathing" || key === "preset_en" || key === "refresh_flip_mode") {
-            document.getElementById(key).checked = data[key];
+            const element = document.getElementById(key)
+            if (element === null) {
+              console.log("Cant find " + key);
+              continue;
+            }
+            element.checked = data[key];
           } else if (key === "preset_count") {
             const select = document.getElementById("active_profile");
             if (select.options.length === 0) {
