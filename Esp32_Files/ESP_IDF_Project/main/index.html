@@ -174,17 +174,6 @@
         </label>
       </div>
     </div>
-    <!--
-    <div id="color_div">
-      <label>Color Pallet</label>
-      <div>
-        <select onchange="updateValue(this.id, this.value)" id="pseudo_color">
-          <option value="0">WHOT</option>
-          <option value="10">BHOT</option>
-        </select>
-      </div>
-    </div>
-    -->
     <div id="scene_div">
       <label>Scene Mode</label>
       <div>
@@ -202,19 +191,19 @@
     <div id="edges_div">
       <label>Edges</label>
       <div>
-        <input style="width: 300px;" type="range" id="edge_enhancment_gear", min="0", max="2" value="0" oninput="updateValue(this.id, this.value)">
+        <input style="width: 300px;" type="range" id="edge_enhancment_gear", min="0", max="2" value="0" onchange="updateValue(this.id, this.value)">
       </div>
     </div>
     <div id="contrast_div">
       <label>Contrast</label>
       <div>
-        <input style="width: 300px;" type="range" id="contrast" min="0" max="100" value="0" oninput="updateValue(this.id, this.value)">
+        <input style="width: 300px;" type="range" id="contrast" min="0" max="100" value="0" onchange="updateValue(this.id, this.value)">
       </div>
     </div>
     <div id="detail_div">
       <label>Detail</label>
       <div>
-        <input style="width: 300px;" type="range" id="detail_enhancement_gear" min="0" max="100" value="0" oninput="updateValue(this.id, this.value)">
+        <input style="width: 300px;" type="range" id="detail_enhancement_gear" min="0" max="100" value="0" onchange="updateValue(this.id, this.value)">
       </div>
     </div>
     <div id="breathing_div">
@@ -226,46 +215,14 @@
         </label>
       </div>
     </div>
-    <!-- // Used to fix camera after factory reset
-    <div id="fix_div">
-      <label>Fixes</label>
-      <div>
-        <button onclick="updateValue('save_video', 1)">Video</button>
-        <button onclick="updateValue('resend', 1)">Resend</button>
-      </div>
-    </div>
-    -->
   </div>
-  <!--
   <div class="main">
-    Camera
-    <div id="burnprotection_div">
-      <label>Burn Protection</label>
-      <div>
-        <label class="switch">
-          <input id="burn_protection_en" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </div>
-    <div id="autoshutter_div">
-      <label>Auto Shutter</label>
-      <div>
-        <label class="switch">
-          <input id="auto_shutter_en" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </div>
-  </div>
-  -->
-  <div class="main">
-    Alignment
+    Alignment (reboot required)
     <div id="flip_div">
       <label>Flip Mode</label>
       <div>
-        <select onchange="updateValue(this.id, this.value)" id="flip_mode">
-          <option value="0">No-Flip</option>
+        <select onchange="updateZoom()" id="flip_mode">
+          <option value="0">Digital Align</option>
           <option value="1">X-Flip</option>
           <option value="2">Y-Flip</option>
           <option value="3">XY-Flip</option>
@@ -284,9 +241,8 @@
     </div>
     -->
     <div id="zoom_div">
-      <label>Zoom/X/Y</label>
+      <label>X / Y</label>
       <div style="display: flex; flex-direction: column;">
-        <input class="zoom_slider" type="range" id="zoom" min="10" max="15" value="10" onchange="updateZoom()">
         <input class="zoom_slider" type="range" id="zoom_x" min="0" max="255" value="0" onchange="updateZoom()">
         <input class="zoom_slider" type="range" id="zoom_y" min="0" max="191" value="0" onchange="updateZoom()">
       </div>
@@ -297,12 +253,14 @@
     let sensor_height = 192;
 
     function updateZoomLimits() {
-      const zoom = document.getElementById("zoom");
+      const flip_mode = document.getElementById("flip_mode");
       const zoom_x = document.getElementById("zoom_x");
       const zoom_y = document.getElementById("zoom_y");
 
-      const x_room = Math.ceil((sensor_width - (sensor_width / (parseInt(zoom.value, 10) / 10))) / 2);
-      const y_room = Math.ceil((sensor_height - (sensor_height / (parseInt(zoom.value, 10) / 10))) / 2);
+      const zoom_value = flip_mode.value == "0" ? 11 : 10;
+
+      const x_room = Math.ceil((sensor_width - (sensor_width / (zoom_value / 10))) / 2);
+      const y_room = Math.ceil((sensor_height - (sensor_height / (zoom_value / 10))) / 2);
       zoom_x.min = (sensor_width / 2) - x_room;
       zoom_x.max = (sensor_width / 2) + x_room;
       zoom_y.min = (sensor_height / 2) - y_room;
@@ -311,29 +269,35 @@
 
     function updateZoom() {
       updateZoomLimits();
+      const flip_mode = document.getElementById("flip_mode");
+      const zoom_x = document.getElementById("zoom_x");
+      const zoom_y = document.getElementById("zoom_y");
 
-      const zoom = parseInt(document.getElementById("zoom").value, 10);
-      const zoom_x = parseInt(document.getElementById("zoom_x").value, 10);
-      const zoom_y = parseInt(document.getElementById("zoom_y").value, 10);
+      const zoom = flip_mode.value == "0" ? 11 : 10;
+
+      const zoom_div = document.getElementById("zoom_div");
+      if (flip_mode.value == "0") {
+        zoom_div.style.display = "flex";
+      } else {
+        zoom_div.style.display = "none";
+      }
+
+      if (flip_mode.value != "0") {
+        updateValue("flip_mode", flip_mode.value);
+        return;
+      }
+
       fetch("/set", {
         method: "POST",
         body: JSON.stringify({ zoom: {
           zoom: zoom,
-          x: zoom_x,
-          y: zoom_y
+          x: parseInt(zoom_x.value, 10),
+          y: parseInt(zoom_y.value, 10)
         }})
       });
     }
 
     function updateValue(key, value) {
-      if (key === "flip_mode") {
-        const zoom_div = document.getElementById("zoom_div");
-        if (value === "0") {
-          zoom_div.style.display = "flex";
-        } else {
-          zoom_div.style.display = "none";
-        }
-      }
       const parsedValue = parseInt(value, 10);
       console.log(`Updating ${key} with value: ${parsedValue}`);
       fetch("/set", {
@@ -368,8 +332,6 @@
             document.getElementById("zoom_x").value = data[key];
           } else if (key === "zoom_y") {
             document.getElementById("zoom_y").value = data[key];
-          } else if (key === "zoom") {
-            document.getElementById("zoom").value = data[key];
           } else if (key === "auto_shutter_en" || key === "burn_protection_en" || key === "breathing" || key === "preset_en" || key === "refresh_flip_mode") {
             const element = document.getElementById(key)
             if (element === null) {

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCOTI Debug</title>
+  <style>
+    :root {
+      --text_color: aliceblue;
+    }
+
+    body {
+      background-color: #2e3136;
+      font-size: 7vh;
+      color: var(--text_color);
+      font-family: Agency FB;
+    }
+
+    .main {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    label {
+      width: 45vw;
+    }
+
+    .main > div {
+      margin: 10px;
+      width: calc(100% - 50px);
+      height: auto;
+      border: 5px solid #60e06d;
+      padding: 5px 10px;
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: left;
+    }
+
+    .main > div > div {
+      margin: 0px 10px;
+      width: auto;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+    }
+
+    select {
+      font-size: 50px;
+      color: var(--text_color);
+      background-color: #55595e;
+      border: 0px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 14px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    button {
+      font-size: 50px;
+      color: var(--text_color);
+      background-color: #55595e;
+      border: 0px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 14px;
+      width: 40vw;
+      height: 100px;
+      cursor: pointer;
+    }
+
+    .zoom_controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .zoom_controls > div {
+      width: 300px;
+      margin: 5px;
+      display: flex;
+      height: fit-content;
+    }
+
+    .zoom_label {
+      font-size: 40px;
+      color: var(--text_color);
+      margin-right: 10px;
+    }
+
+    .zoom_slider {
+      width: 300px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div id="fix_div">
+      <label>Camera</label>
+      <div>
+        <button onclick="updateValue('resend', 1)">Repair Camera</button>
+      </div>
+    </div>
+    <div id="refresh_flip_mode_div">
+      <label>Periodically Refresh</label>
+      <div>
+        <label class="switch">
+          <input id="refresh_flip_mode" onchange="updateValue(this.id, this.checked ? 1 : 0)" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <script>
+    function updateValue(key, value) {
+      const parsedValue = parseInt(value, 10);
+      console.log(`Updating ${key} with value: ${parsedValue}`);
+      fetch("/set", {
+        method: "POST",
+        body: JSON.stringify({ [key]: parsedValue })
+      }).then(response => {
+      
+      });
+    }
+
+    function updateRemoteValue(key, source) {
+      updateValue(key, document.getElementById(source).value);
+    }
+  </script>
+</body>
+</html>

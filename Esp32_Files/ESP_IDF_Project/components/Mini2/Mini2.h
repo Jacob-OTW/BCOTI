@@ -99,7 +99,7 @@ void Mini2_init(Mini2_t* cam);
 esp_err_t Mini2_set_color_pallet(Mini2_t* cam, enum PseudoColor pseudo_color);
 esp_err_t Mini2_set_scene_mode(Mini2_t* cam, enum SceneMode scene_mode);
 esp_err_t Mini2_get_flip_mode(Mini2_t* cam, enum FlipMode* flip_mode_out);
-esp_err_t Mini2_set_flip_mode(Mini2_t* cam, enum SceneMode FlipMode);
+esp_err_t Mini2_set_flip_mode(Mini2_t* cam, enum FlipMode flip_mode);
 esp_err_t Mini2_set_analog_video_format(Mini2_t* cam, enum AnalogVideoFormat av_format);
 esp_err_t Mini2_get_analog_video_format(Mini2_t* cam, enum AnalogVideoFormat* av_format_out);
 esp_err_t Mini2_set_digital_video_format(Mini2_t* cam, bool enabled, enum DigitalVideoFormat video_format, enum DetectorRefreshRate fps);

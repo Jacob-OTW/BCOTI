@@ -102,8 +102,8 @@ esp_err_t Mini2_set_scene_mode(Mini2_t* cam, enum SceneMode scene_mode) {
     return Mini2_write_command(cam, cmd, sizeof(cmd));
 }
 
-esp_err_t Mini2_set_flip_mode(Mini2_t* cam, enum SceneMode FlipMode) {
-    uint8_t cmd[] = {0x10, 0x10, 0x43, 0x00, FlipMode};
+esp_err_t Mini2_set_flip_mode(Mini2_t* cam, enum FlipMode flip_mode) {
+    uint8_t cmd[] = {0x10, 0x10, 0x43, 0x00, flip_mode};
     return Mini2_write_command(cam, cmd, sizeof(cmd));
 }
 
@@ -269,10 +269,7 @@ void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset, alignment_preset_t
         if (err == ESP_OK && format == alignment->av_format) {
             ESP_LOGI(Mini2_TAG, "Format already matches, no need to send again.");
         } else {
-            ESP_LOGE(Mini2_TAG, "Failed to read av format, or found missmatch");
-            Mini2_set_digital_video_format(cam, true, UsbProgressive, Hz50);
-            Mini2_set_analog_video_format(cam, alignment->av_format);
-            Mini2_save_video(cam);
+            Mini2_set_analog_video_format(cam, PAL);
         }
     }
 

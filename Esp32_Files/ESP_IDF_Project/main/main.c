@@ -31,6 +31,8 @@ volatile int64_t button_debouce;
 
 extern const uint8_t index_html_start[] asm("_binary_index_html_start");
 extern const uint8_t index_html_end[]   asm("_binary_index_html_end");
+extern const uint8_t debug_html_start[] asm("_binary_debug_html_start");
+extern const uint8_t debug_html_end[]   asm("_binary_debug_html_end");
 
 static esp_netif_t *sta_netif = NULL;
 
@@ -96,11 +98,11 @@ value_preset_t base_preset = {
 stored_values_t stored = {
     .active_preset = 0,
     .alignment = {
-        .zoom = 10,
+        .zoom = 11,
         .zoom_x = 128,
         .zoom_y = 96,
         .av_format = PAL,
-        .flip_mode = X_Flip,
+        .flip_mode = No_Flip,
         .fps = Hz50,
         .refresh_flip_mode = false,
     },
@@ -245,6 +247,7 @@ static esp_err_t post_handler(httpd_req_t *req) {
     }
     ret = json_obj_get_int(&jctx, "flip_mode", &value);
     if (ret == OS_SUCCESS) {
+        Mini2_set_centre_zoom(&cam, 10);
         Mini2_set_flip_mode(&cam, (enum FlipMode)value);
         stored.alignment.flip_mode = (enum FlipMode)value;
     }
@@ -290,8 +293,14 @@ static esp_err_t post_handler(httpd_req_t *req) {
 
     ret = json_obj_get_bool(&jctx, "resend", &bool_val);
     if (ret == OS_SUCCESS && bool_val) {
+        Mini2_restore_factory_parameters(&cam);
+        vTaskDelay(pdMS_TO_TICKS(3000));
         Mini2_set_digital_video_format(&cam, true, UsbProgressive, Hz50);
+        vTaskDelay(pdMS_TO_TICKS(3000));
         Mini2_set_analog_video_format(&cam, PAL);
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        Mini2_save_video(&cam);
+        vTaskDelay(pdMS_TO_TICKS(3000));
     }
 
     ret = json_obj_get_bool(&jctx, "breathing", &bool_val);
@@ -318,6 +327,7 @@ static esp_err_t post_handler(httpd_req_t *req) {
         int x, y, zoom;
         if (json_obj_get_int(&jctx, "x", &x) == OS_SUCCESS && json_obj_get_int(&jctx, "y", &y) == OS_SUCCESS && json_obj_get_int(&jctx, "zoom", &zoom) == OS_SUCCESS) {
             Mini2_set_flip_mode(&cam, No_Flip);
+            stored.alignment.flip_mode = No_Flip;
             Mini2_set_point_zoom(&cam, (uint16_t)x, (uint16_t)y, (uint8_t)zoom);
             stored.alignment.zoom = zoom;
             stored.alignment.zoom_x = x;
@@ -438,6 +448,20 @@ static const httpd_uri_t echo = {
     .user_ctx  = NULL
 };
 
+esp_err_t debug_get_handler(httpd_req_t *req) {
+    const uint32_t html_size = debug_html_end - debug_html_start;
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_send(req, (const char *)debug_html_start, html_size);
+    return ESP_OK;
+}
+
+httpd_uri_t debug_uri = {
+    .uri      = "/debug",
+    .method   = HTTP_GET,
+    .handler  = debug_get_handler,
+    .user_ctx = NULL
+};
+
 esp_err_t index_get_handler(httpd_req_t *req) {
     const uint32_t html_size = index_html_end - index_html_start;
     httpd_resp_set_type(req, "text/html");
@@ -464,8 +488,15 @@ void app_main(void) {
     };
     gpio_config(&io_conf);
 
+    ESP_ERROR_CHECK(nvs_open("storage", NVS_READWRITE, &flash_handle));
+    size_t len = sizeof(stored_values_t);
+    esp_err_t err = nvs_get_blob(flash_handle, "stored_values", &stored, &len);
+    if (err != ESP_OK ) {
+        ESP_LOGE(TAG, "Failed to read stores from NVS, going with defaults.");
+    }
+
     bool wifi_en = (gpio_get_level(MULTI_BTN) == 0) || (stored.first_boot);
-    ESP_LOGI(TAG, "Wifi: %d", (int)wifi_en);
+    ESP_LOGI(TAG, "Wifi: %d, stored: %d", (int)wifi_en, stored.first_boot);
 
     if (wifi_en) {
         ESP_ERROR_CHECK(esp_netif_init());
@@ -507,13 +538,6 @@ void app_main(void) {
     }
     
     Mini2_init(&cam);
-
-    ESP_ERROR_CHECK(nvs_open("storage", NVS_READWRITE, &flash_handle));
-    size_t len = sizeof(stored_values_t);
-    esp_err_t err = nvs_get_blob(flash_handle, "stored_values", &stored, &len);
-    if (err != ESP_OK) {
-        ESP_LOGI(TAG, "Failed to read stores from NVS, going with defaults.");
-    }
     Mini2_apply_preset(&cam, &stored.presets[stored.active_preset], &stored.alignment, false);
 
     xTaskCreate(loop_task, "loop task", 16384, NULL, 5, NULL);
@@ -528,6 +552,7 @@ void app_main(void) {
             ESP_LOGI(TAG, "Registering URI handlers");
             httpd_register_uri_handler(server, &echo);
             httpd_register_uri_handler(server, &index_uri);
+            httpd_register_uri_handler(server, &debug_uri);
             httpd_register_uri_handler(server, &retireve_values_route);
         }
     }
