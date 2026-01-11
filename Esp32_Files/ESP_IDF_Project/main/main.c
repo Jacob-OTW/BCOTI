@@ -488,6 +488,14 @@ void app_main(void) {
     };
     gpio_config(&io_conf);
 
+    for (int i=0; i<PRESET_COUNT; i++) {
+        if (i < (sizeof(default_presets) / sizeof(value_preset_t))) {
+            stored.presets[i] = default_presets[i];
+        } else {
+            stored.presets[i] = base_preset;
+        }
+    }
+
     ESP_ERROR_CHECK(nvs_open("storage", NVS_READWRITE, &flash_handle));
     size_t len = sizeof(stored_values_t);
     esp_err_t err = nvs_get_blob(flash_handle, "stored_values", &stored, &len);
@@ -528,14 +536,6 @@ void app_main(void) {
     }
 
     vTaskDelay(pdMS_TO_TICKS(5000));
-
-    for (int i=0; i<PRESET_COUNT; i++) {
-        if (i < (sizeof(default_presets) / sizeof(value_preset_t))) {
-            stored.presets[i] = default_presets[i];
-        } else {
-            stored.presets[i] = base_preset;
-        }
-    }
     
     Mini2_init(&cam);
     Mini2_apply_preset(&cam, &stored.presets[stored.active_preset], &stored.alignment, false);
