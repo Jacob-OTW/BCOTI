@@ -18,7 +18,7 @@ You'll need a mounting-adapter that fits your specific device, which then mounte
 ensure that the BCOTI sits straight in front of your front lens, not doing so will cause the overlay not to be centred in the IIT view.
 
 ## Setting the brightness
-1. Which the unit attached to your NV device, turn it on
+1. With the unit attached to your NV device, turn it on
 2. Turn the knob on the back to the lowest brightness position.
 3. Set the display brightness to a level where the rectangle shape of the display is not just about not visible anymore, using the outer two buttons on the side of the unit.
 4. Now turn up the knob on the back to the desired threshold level.
