@@ -31,3 +31,7 @@ This does allow for pretty much any housing using standard (non-RPO style) PVS14
 ### PVS1531_Shell_Clip.step
 - Uses an M2 screw to clamp onto the pod itself.
 - Requires 1x 3.6mmOD M2x3 insert (same kind as for the body, found in the BOM), and an M2 screw with a length of 12mm or longer. The Side with the small X is the side you put the insert into.
+
+###PVS14_InfinityRing_Clip_for_Infinity_IRIS
+- Uses an M2 screw to clamp onto the pod itself.
+- Same as `PVS14_InfinityRing_Clip` but is enlongated to accomodate the Infinity Cap iris 
