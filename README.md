@@ -108,14 +108,11 @@ Some of the links are affiliate links, which means I make a small commission on 
 
 # Build-Guide
 
-## (Still outdated) Build Guide Video
+## Build Guide Video
 
-A full video guide is also available, but I'd recommend have the written instructions open as well, as any comments or changes will be made there.
+Thanks to 7echa, a full video guide for the V2-beta is also available. I highly recommend having the schematic open as well, as any changes will be made there.
 
-### Important Notes
-- The momentary push button is now connected to GPIO8 (was GPIO21)
-
-[![Video Guide](https://img.youtube.com/vi/oMnXicHUu7w/0.jpg)](https://www.youtube.com/watch?v=oMnXicHUu7w)
+[![Video Guide](https://img.youtube.com/vi/cBrSBoBCE3g/0.jpg)](https://www.youtube.com/watch?v=cBrSBoBCE3g)
 
 ## 3d printed parts
 
@@ -142,7 +139,7 @@ If you're going to have these parts MJF printed (not recommended during beta), t
 
     Only the Front and Back part will necessarily need supports. You may want to manually add them via the slicer, even if the printed thinks it can bridge them.
 
-2. Print the following parts out of a fairly flexible TPU (I used 95A from Overture)
+2. Print the following parts out of TPU (I used 95A from Overture)
     - `TPU_Gasket.step`
     - `TPU_Lens_Cover.step`
     - `TPU_Button_Cover.step`
