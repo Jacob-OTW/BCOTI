@@ -40,6 +40,13 @@ nvs_handle_t flash_handle;
 
 int8_t brightness_button_count = 0;
 
+Mini2_t cam = {
+    .uart_port = UART_NUM_1, // C3 only has num0 and num1, and num0 is used for debug / USB_CDC
+    .uart_tx = UART_TX,
+    .uart_rx = UART_RX,
+    .variant = Mini2_256,
+};
+
 typedef struct stored_values_t{
     uint8_t active_preset;
     alignment_preset_t alignment;
@@ -74,7 +81,7 @@ value_preset_t default_presets[] = {
         .preset_en = true,
         .pseudo_color = WHOT,
         .scene_mode = Outline,
-        .contrast = 100,
+        .contrast = 90,
         .edge_enhancment_gear = 1,
         .detail_enhancement_gear = 50,
         .burn_protection_en = true,
@@ -107,13 +114,6 @@ stored_values_t stored = {
         .refresh_flip_mode = false,
     },
     .first_boot = true
-};
-
-Mini2_t cam = {
-    .uart_port = UART_NUM_1, // C3 only has num0 and num1, and num0 is used for debug / USB_CDC
-    .uart_tx = UART_TX,
-    .uart_rx = UART_RX,
-    .variant = Mini2_256
 };
 
 static void wifi_event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
@@ -295,9 +295,11 @@ static esp_err_t post_handler(httpd_req_t *req) {
     if (ret == OS_SUCCESS && bool_val) {
         Mini2_restore_factory_parameters(&cam);
         vTaskDelay(pdMS_TO_TICKS(3000));
-        Mini2_set_digital_video_format(&cam, true, UsbProgressive, Hz50);
+        Mini2_set_digital_video_format(&cam, true, UsbProgressive, cam.variant.high_fps);
         vTaskDelay(pdMS_TO_TICKS(3000));
         Mini2_set_analog_video_format(&cam, PAL);
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        Mini2_set_detector_fps(&cam, cam.variant.high_fps);
         vTaskDelay(pdMS_TO_TICKS(3000));
         Mini2_save_video(&cam);
         vTaskDelay(pdMS_TO_TICKS(3000));
@@ -345,7 +347,7 @@ static esp_err_t post_handler(httpd_req_t *req) {
             ESP_LOGE(TAG, "Active profile number would be out-of-bounds!");
         }   
     }
-
+    
     ret = json_obj_get_bool(&jctx, "NUC", &bool_val);
     if (ret == OS_SUCCESS && bool_val) {
         Mini2_NUC(&cam);
@@ -501,6 +503,7 @@ void app_main(void) {
     esp_err_t err = nvs_get_blob(flash_handle, "stored_values", &stored, &len);
     if (err != ESP_OK ) {
         ESP_LOGE(TAG, "Failed to read stores from NVS, going with defaults.");
+        stored.alignment.fps = cam.variant.high_fps;
     }
 
     bool wifi_en = (gpio_get_level(MULTI_BTN) == 0) || (stored.first_boot);

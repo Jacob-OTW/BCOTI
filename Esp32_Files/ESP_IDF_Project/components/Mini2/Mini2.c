@@ -226,6 +226,7 @@ esp_err_t Mini2_set_detector_fps(Mini2_t* cam, enum DetectorRefreshRate fps) {
         ESP_LOGE(Mini2_TAG, "Selected variant doesn't support this detector fps.");
         return ESP_FAIL;
     }
+    ESP_LOGI(Mini2_TAG, "Setting FPS to %d", (int)fps);
     uint8_t cmd[] = {0x10, 0x10, 0x44, 0x00, fps};
     return Mini2_write_command(cam, cmd, sizeof(cmd));
 }
@@ -263,6 +264,7 @@ esp_err_t Mini2_Background_Correction(Mini2_t* cam) {
 void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset, alignment_preset_t* alignment, bool seem_less) {
     esp_err_t err;
     
+    /*
     if (!seem_less) {
         enum AnalogVideoFormat format;
         err = Mini2_get_analog_video_format(cam, &format);
@@ -272,6 +274,7 @@ void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset, alignment_preset_t
             Mini2_set_analog_video_format(cam, PAL);
         }
     }
+    */
 
     Mini2_set_scene_mode(cam, preset->scene_mode);
     // Mini2_set_brightness(cam, preset->brightness); // Brightness is handeld seperatly for BCOTI
@@ -281,10 +284,6 @@ void Mini2_apply_preset(Mini2_t* cam, value_preset_t* preset, alignment_preset_t
     Mini2_set_burn_protection(cam, true);
     Mini2_set_auto_shutter(cam, true);
     Mini2_set_color_pallet(cam, WHOT);
-
-    if (!seem_less) {
-        Mini2_set_detector_fps(cam, alignment->fps);
-    }
 
     Mini2_set_flip_mode(cam, alignment->flip_mode);
     if (alignment->flip_mode == No_Flip) {
